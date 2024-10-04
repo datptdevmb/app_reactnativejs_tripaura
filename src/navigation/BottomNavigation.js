@@ -8,6 +8,8 @@ import SettingLoggedScreen from '../screens/main/tabs/setting/SettingLoggedScree
 import { ROUTES } from '../constants/routes';
 import colors from '../constants/colors';
 import SlideChangeText from '../components/common/slide/SlideChangeText';
+import HomeIcon from '../assets/icons/HomeIcon';
+import VourcherIcon from '../assets/icons/VorcherIcon';
 
 
 const Tab = createBottomTabNavigator();
@@ -102,14 +104,15 @@ const ButtomNavigation = () => {
 
               // backgroundColor:colors.primary
             }}>
-              <Image
+              <HomeIcon color={focused ? colors.primary : '#A8A8A8'} />
+              {/* <Image
                 resizeMode='contain'
                 source={require('../assets/icons/HomeIcon.png')}
                 style={{
                   tintColor: focused ? colors.primary : "#A8A8A8",
 
-                }} />
-              <Text style={{ fontSize: 8 }}>{ROUTES.home}</Text>
+                }} /> */}
+              <Text style={{}}>{ROUTES.home}</Text>
             </View>
           )
         }}
@@ -129,13 +132,7 @@ const ButtomNavigation = () => {
 
               // backgroundColor:colors.primary
             }}>
-              <Image
-                resizeMode='contain'
-                source={require('../assets/icons/HomeIcon.png')}
-                style={{
-                  tintColor: focused ? colors.primary : colors.Gray_800,
-
-                }} />
+              <VourcherIcon />
               <Text>Uu dai</Text>
             </View>
           )
