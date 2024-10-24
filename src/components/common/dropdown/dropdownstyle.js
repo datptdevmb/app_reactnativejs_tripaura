@@ -4,14 +4,14 @@ import FONTSIZE from '../../../constants/fontsize';
 
 const stylesdown = StyleSheet.create({
     container: {
-        // width: '100%',
-        // height: '100%',
         justifyContent: 'center',
         alignItems: 'center',
+        marginTop: 10,
     },
     containerpicker: {
         display: 'flex',
-        flexDirection: 'row'
+        flexDirection: 'row',
+        justifyContent:'space-between'
     },
     contentchon: {
         display: 'flex',
@@ -19,10 +19,9 @@ const stylesdown = StyleSheet.create({
         alignItems: 'center',
     },
     picker: {
-        width: 159,
+        width: 155,
         height: 44,
-        paddingVertical: 11,
-        paddingHorizontal: 10,
+        justifyContent: 'space-between',
         alignItems: 'center',
         backgroundColor: '#f2f2f2'
     },
@@ -30,8 +29,11 @@ const stylesdown = StyleSheet.create({
         fontSize: FONTSIZE.sm,
         fontWeight: '700',
         fontFamily: 'Lato',
-        color: colors.Gray_800,
+        color: colors.Grey_800,
         marginBottom: 5,
+    },
+    dropdown: {
+        marginEnd: 10, 
     },
 });
   

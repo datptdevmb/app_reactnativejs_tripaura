@@ -1,45 +1,50 @@
-import { Text, TouchableOpacity, View, ToastAndroid } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import { Text, View, ToastAndroid, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState, useContext } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppContext } from '../../AppContext';
 import Header from '../../../components/common/header/Headercomponet';
 import InputComponent from '../../../components/common/input/InputCompoment';
 import Button from '../../../components/common/button/Button';
 import stylesglobal from '../../../constants/global';
 import Icons from '../../../constants/Icons';
-import { useNavigation } from '@react-navigation/native';
-import { useDispatch, useSelector } from 'react-redux';
-import { DangNhapTaiKhoan } from '../../../api/slice/loginreducers';
+import { DangNhapTaiKhoan } from '../../../redux/slices/loginreducers';
 
-const Login = () => {
-  const navigation = useNavigation();
+const Login = (props) => {
+  const { navigation, route } = props;
+  const { setUser, setIsLogin } = useContext(AppContext);
   const dispatch = useDispatch();
+  const { loginData, loginStatus } = useSelector((state) => state.login || {});
 
   const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
-  const { loginData, loginStatus } = useSelector((state) => state.login);
-
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const loginType = route.params?.loginType || 'email';
+  console.log(loginType)
+
+  console.log('login', loginData),
+    console.log('loginStatus', loginStatus)
 
   useEffect(() => {
-    console.log('Login Status:', loginStatus);
-    console.log('Login Data:', loginData);
-
-    if (loginStatus === 'succeeded' && loginData.status) {
-      ToastAndroid.show(loginData.message, ToastAndroid.SHORT);
-      setIsLoggedIn(true);
+    if (loginStatus === 'succeeded') {
+      console.log('loginData.data:', loginData.data);
+      setUser(loginData.data);
+      setIsLogin(true);
+      console.log('user:', loginData.data);
       navigation.navigate('MainTabNavigation');
     }
 
     if (loginStatus === 'failed') {
-      if (loginData.code === 400) {
-        ToastAndroid.show(loginData.message, ToastAndroid.SHORT);
-        console.log('Error:', loginData.message);
-      }
+      ToastAndroid.show(loginData.message, ToastAndroid.SHORT);
     }
   }, [loginStatus, loginData, navigation]);
+
+
 
   useEffect(() => {
     if (isLoggedIn) {
       setEmail('');
+      setPhone('');
       setPassword('');
       setIsLoggedIn(false);
     }
@@ -49,27 +54,26 @@ const Login = () => {
     navigation.goBack();
   };
 
-  const validateInputs = () => {
-    let valid = true;
-    if (!email) {
-      ToastAndroid.show('Email không được để trống', ToastAndroid.SHORT);
-      valid = false;
-    }
-
-    if (!password) {
-      ToastAndroid.show('Mật khẩu không được để trống', ToastAndroid.SHORT);
-      valid = false;
-    }
-
-    return valid;
-  };
-
   const dangnhaptaikhoan = () => {
-    console.log('Attempting to login with:', { email, password });
-    if (validateInputs()) {
+    // dispatch(DangNhapTaiKhoan({ email, password }));
+    if (loginType === 'email') {
+      if (!email) {
+        ToastAndroid.show('Vui lòng nhập email', ToastAndroid.SHORT);
+        return;
+      }
       dispatch(DangNhapTaiKhoan({ email, password }));
+    } else {
+      if (!phone) {
+        ToastAndroid.show('Vui lòng nhập số điện thoại', ToastAndroid.SHORT);
+        return;
+      }
+      dispatch(DangNhapTaiKhoan({ phone, password }));
     }
   };
+
+  const goToRegister = () => {
+    navigation.navigate('RegisterScreen', { loginType });
+  }
 
   return (
     <View style={stylesglobal.container}>
@@ -82,17 +86,33 @@ const Login = () => {
         Trải nghiệm & khám phá tiện ích của{' '}
         <Text style={{ color: '#0572E7' }}>TripAura</Text>
       </Text>
-
-      <Text style={[stylesglobal.textauth_description, { marginTop: 30 }]}>Email</Text>
-      <InputComponent
-        placeholder="Nhập email của bạn"
-        onTextChange={text => setEmail(text)}
-        value={email}
-        hidePassword={false}
-        placeholderTextColor="#B0B0B0"
-        keyboardType="email-address"
-      />
-
+      {
+        loginType === 'email' ? (
+          <>
+            <Text style={[stylesglobal.textauth_description, { marginTop: 30 }]}>Email</Text>
+            <InputComponent
+              placeholder="Nhập email của bạn"
+              onTextChange={text => setEmail(text)}
+              value={email}
+              hidePassword={false}
+              placeholderTextColor="#B0B0B0"
+              keyboardType="email-address"
+            />
+          </>
+        ) : (
+          <>
+            <Text style={[stylesglobal.textauth_description, { marginTop: 30 }]}>Số điện thoại</Text>
+            <InputComponent
+              placeholder="Nhập số điện thoại của bạn"
+              onTextChange={text => setPhone(text)}
+              value={phone}
+              hidePassword={false}
+              placeholderTextColor="#B0B0B0"
+              keyboardType="phone-pad"
+            />
+          </>
+        )
+      }
       <Text style={[stylesglobal.textauth_description, { marginTop: 12 }]}>Mật khẩu</Text>
       <InputComponent
         placeholder="Nhập mật khẩu của bạn"
@@ -108,7 +128,7 @@ const Login = () => {
         style={{ marginTop: 29 }}
       />
       <View style={[stylesglobal.containerTextOptions, { marginTop: 30 }]}>
-        <TouchableOpacity onPress={() => navigation.navigate('RegisterScreen')}>
+        <TouchableOpacity onPress={goToRegister}>
           <Text style={stylesglobal.commonTextStyle}>Tạo tài khoản</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.navigate('ForgotScreen')}>

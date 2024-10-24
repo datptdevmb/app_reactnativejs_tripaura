@@ -15,7 +15,7 @@ import colors from '../../../../constants/colors';
 import Swiper from 'react-native-swiper';
 import TourCard from '../../../../components/common/card/CardTour';
 import TourCardVetical from '../../../../components/common/card/TourCardVetical';
-import {tours, categorys, data} from '../../../../constants/data';
+import {data} from '../../../../constants/data';
 import {useDispatch, useSelector} from 'react-redux';
 import {fetchCategory} from '../../../../redux/slices/category.slice';
 import {
@@ -32,6 +32,7 @@ import {useHomeData} from '../../../../hooks/useHomeData';
 function HomeScreen ({navigation}){
   const dispatch = useDispatch();
 
+
   const {
     categories,
     tours,
@@ -39,6 +40,7 @@ function HomeScreen ({navigation}){
     images,
     isLoading
   } = useHomeData();
+
 
   const [refreshing, setRefreshing] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);

@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { ToastAndroid } from 'react-native';
 
 //tạo hàm DangNhapTaiKhoan để thực hiện chức năng gọi API đăng ký tài khoản
 export const DangNhapTaiKhoan = createAsyncThunk('auth/login', async data => {
@@ -34,10 +35,12 @@ export const loginSlice = createSlice({
             .addCase(DangNhapTaiKhoan.fulfilled, (state, action) => {
                 state.loginStatus = 'succeeded';
                 state.loginData = action.payload;
+                ToastAndroid.show(action.payload.message, ToastAndroid.SHORT);
             })
             .addCase(DangNhapTaiKhoan.rejected, (state, action) => {
                 state.loginStatus = 'failed';
                 console.log(action.error.message);
+                ToastAndroid.show(action.payload.message, ToastAndroid.SHORT);
             });
     },
 });

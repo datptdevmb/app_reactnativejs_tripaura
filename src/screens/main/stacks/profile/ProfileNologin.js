@@ -1,6 +1,7 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import Button from '../../../../components/common/button/Button'
+import Icons from '../../../../constants/Icons';
 
 const SettingScreen = () => {
 
@@ -32,9 +33,9 @@ const SettingScreen = () => {
         <View style={styles.btnHelpContainer}>
           <TouchableOpacity>
             <View style={styles.imageTroGiupContainer}>
-              {/* <Image
+              <Image
                 style={styles.imageTroGiup}
-                source={require('../../../assets/images/troGiup.png')} /> */}
+                source={require('../../../../assets/icons/ic_lock.png')} />
             </View>
             <Text style={styles.txtTroGiup}>Trợ Giúp</Text>
           </TouchableOpacity>
@@ -42,9 +43,9 @@ const SettingScreen = () => {
         <View style={styles.btnCauHoiContainer}>
           <TouchableOpacity>
             <View style={styles.imageTroGiupContainer}>
-              {/* <Image
+              <Image
                 style={styles.imageTroGiup}
-                source={require('../../../assets/images/cauHoi.png')} /> */}
+                source={require('../../../../assets/icons/ic_helpcenter.png')} />
             </View>
             <Text style={styles.txtTroGiup}>Câu Hỏi</Text>
           </TouchableOpacity>
@@ -55,8 +56,8 @@ const SettingScreen = () => {
       <View style={styles.dkdv}>
         <TouchableOpacity>
           <View style={styles.btnContainer}>
-            {/* <Image style={styles.imageBtn}
-              source={require('../../../assets/images/dkdv.png')} /> */}
+          <Image style={styles.imageBtn}
+                        source={Icons.ic_bell} />
             <Text style={styles.txtDieuKhoan}>Điều khoản sử dụng dịch vụ</Text>
             {/* <Image style={styles.btnNext}
               source={require('../../../assets/images/iconNext.png')} /> */}
@@ -66,6 +67,8 @@ const SettingScreen = () => {
       <View style={styles.veChungToi}>
         <TouchableOpacity>
           <View style={styles.btnContainer}>
+          <Image style={styles.imageBtn}
+                        source={Icons.ic_bell} />
             {/* <Image style={styles.imageBtn}
               source={require('../../../assets/images/dkdv.png')} /> */}
             <Text style={styles.txtDieuKhoan}>Về chúng tôi</Text>

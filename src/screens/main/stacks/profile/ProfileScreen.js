@@ -1,17 +1,20 @@
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native'
-import React from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import Headercomponet from '../../../../components/common/header/Headercomponet'
 import stylesglobal from '../../../../constants/global';
 import Icons from '../../../../constants/Icons';
 import colors from '../../../../constants/colors';
 import fontsize from '../../../../constants/fontsize';
+import { AppContext } from '../../../AppContext';
 
 const ProfileScreen = (props) => {
   const { navigation } = props;
+  const { user, setUser } = useContext(AppContext)
+  const [image, setImage] = useState(null);
+
   const nhanBack = () => {
     navigation.goBack()
   }
-
   return (
     <View style={stylesglobal.container}>
       <Headercomponet
@@ -22,12 +25,15 @@ const ProfileScreen = (props) => {
       />
       <View style={styles.avatarContainer}>
         <View style={styles.imageAvatar}>
-          <Image source={Icons.avatar} />
+          <Image
+            source={image ? { uri: image } : (user && user.avatar ? { uri: user.avatar } : Icons.avatar)}
+            style={styles.imageAvatar}
+          />
           <TouchableOpacity style={styles.icCameraContainer}>
             <Image source={Icons.ic_camera} />
           </TouchableOpacity>
         </View>
-        <Text style={styles.txtName}>Nguyễn Văn Bảo Hoàng</Text>
+        <Text style={styles.txtName}>{user.fullname}</Text>
       </View>
 
       <View style={styles.underline} />
@@ -37,14 +43,14 @@ const ProfileScreen = (props) => {
         <View style={styles.itemProfile}>
           <Image style={styles.icon}
             source={Icons.ic_giftbox} />
-          <Text style={[styles.txtTitle,{color:colors.Grey_600}]}>Ngày sinh:</Text>
-          <Text style={styles.txtContent}>29/11/2004</Text>
+          <Text style={[styles.txtTitle, { color: colors.Grey_600 }]}>Ngày sinh:</Text>
+          <Text style={styles.txtContent}>{user.dateofbirth}</Text>
         </View>
         <View style={styles.itemProfile}>
           <Image style={styles.icon}
             source={Icons.ic_person} />
-          <Text style={[styles.txtTitle,{color:colors.Grey_600}]}>Gioi tính</Text>
-          <Text style={styles.txtContent}>Nam</Text>
+          <Text style={[styles.txtTitle, { color: colors.Grey_600 }]}>Gioi tính: </Text>
+          <Text style={styles.txtContent}>{user.gender}</Text>
         </View>
       </View>
       <View style={styles.ttlhContainer}>
@@ -52,7 +58,7 @@ const ProfileScreen = (props) => {
           <Text style={styles.title}>Thông tin liên hệ</Text>
           <TouchableOpacity
             onPress={() => navigation.navigate('EditProfileScreen')}>
-            <Image 
+            <Image
               source={Icons.ic_edit} />
           </TouchableOpacity>
         </View>
@@ -60,20 +66,20 @@ const ProfileScreen = (props) => {
           <Image style={styles.icon}
             source={Icons.ic_email} />
           <Text style={styles.txtTitle}>Emai:</Text>
-          <Text style={styles.txtContent}>nvbaohoang@gmail.com</Text>
+          <Text style={styles.txtContent}>{user.email}</Text>
         </View>
         <View style={styles.itemProfile}>
           <Image style={styles.icon}
             source={Icons.ic_cellphone} />
           <Text style={styles.txtTitle}>Phone:</Text>
-          <Text style={styles.txtContent}>03427245744</Text>
+          <Text style={styles.txtContent}>{user.phone}</Text>
         </View>
         <View style={styles.itemProfile}>
           <Image style={styles.icon}
             source={Icons.ic_address} />
           <Text style={styles.txtTitle}>Địa chỉ:</Text>
           <Text numberOfLines={1}
-            style={styles.txtContent}>Triệu Phong, Tỉnh Quảng Trị</Text>
+            style={styles.txtContent}>{user.address}</Text>
         </View>
       </View>
 
@@ -93,14 +99,13 @@ const styles = StyleSheet.create({
   ttlhContainer: {
     width: '100%',
     marginTop: 24,
-
   },
   icon: {
     width: 24,
     height: 24,
     justifyContent: 'center',
     alignItems: 'center',
-    tintColor:  colors.Grey_300,
+    tintColor: colors.Grey_300,
   },
   txtContent: {
     width: 250,
@@ -172,7 +177,8 @@ const styles = StyleSheet.create({
   imageAvatar: {
     width: 65,
     height: 65,
-    borderRadius: 50
+    borderRadius: 50,
+    resizeMode: 'cover'
   },
   header: {
     color: colors.primary_500,

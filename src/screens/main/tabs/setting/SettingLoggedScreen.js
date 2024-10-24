@@ -3,11 +3,21 @@ import React, { useState } from 'react'
 import stylesglobal from '../../../../constants/global';
 import Icons from '../../../../constants/Icons';
 import colors from '../../../../constants/colors';
+import { useSelector } from 'react-redux';
 
 const SettingLoggedScreen = (props) => {
     const { navigation } = props;
     const [isEnabled, setIsEnabled] = useState(false);
+    const {user} =useSelector(state => state.reducer.auth)
+    console.log(user)
     const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+
+    function handleMap(){
+        navigation.navigate('MapScreen')
+    }
+    function handleCauhoi(){
+        navigation.navigate('FAQsSrceen')
+    }
     return (
         <View style={stylesglobal.container}>
             <View style={styles.headerContainer}>
@@ -18,7 +28,7 @@ const SettingLoggedScreen = (props) => {
                     </TouchableOpacity>
                 </View>
                 <View style={styles.txtNameContainer}>
-                    <Text style={styles.txtName}>Name</Text>
+                    <Text style={styles.txtName}>{user.user.fullname}</Text>
                     <TouchableOpacity 
                     onPress={() => navigation.navigate('EditProfileScreen')}
                     style={styles.btnCapNhaHoSo}>
@@ -36,7 +46,7 @@ const SettingLoggedScreen = (props) => {
 
             <View style={styles.btnHorizontalContainer}>
                 <View >
-                    <TouchableOpacity style={styles.btnCauHoiContainer}>
+                    <TouchableOpacity onPress={handleMap} style={styles.btnCauHoiContainer}>
                         <View style={styles.imageTroGiupContainer}>
                             <Image
                                 style={styles.imageTroGiup}
@@ -46,7 +56,7 @@ const SettingLoggedScreen = (props) => {
                     </TouchableOpacity>
                 </View>
                 <View >
-                    <TouchableOpacity style={styles.btnCauHoiContainer}>
+                    <TouchableOpacity onPress={handleCauhoi} style={styles.btnCauHoiContainer}>
                         <View style={styles.imageTroGiupContainer}>
                             <Image
                                 style={styles.imageTroGiup}

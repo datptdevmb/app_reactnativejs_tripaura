@@ -22,6 +22,11 @@ import ic_mony from '../assets/icons/ic_mony.png'
 import ic_lockout from '../assets/icons/ic_lockout.png'
 import ic_message from '../assets/icons/ic_message.png'
 import ic_arrowbottom from '../assets/icons/ic_arrowbottom.png'
+import ic_helpcenter from '../assets/icons/ic_helpcenter.png'
+import ic_instagram from '../assets/icons/ic_instagram.png'
+import ic_twitter from '../assets/icons/ic_twitter.png'
+import ic_website from '../assets/icons/ic_website.png'
+import icon_fb from '../assets/icons/icon_fb.png'
 // image
 
 import avatar from '../assets/images/avatar.png';
@@ -38,7 +43,7 @@ const Icons = {
   ic_giftbox: ic_giftbox,
   ic_person: ic_person,
   ic_cellphone: ic_cellphone,
-  ic_address:ic_address,
+  ic_address: ic_address,
   ic_edit: ic_edit,
   ic_time: ic_time,
   ic_star: ic_star,
@@ -53,12 +58,19 @@ const Icons = {
   ic_lockout: ic_lockout,
   ic_message: ic_message,
   ic_arrowbottom: ic_arrowbottom,
+  ic_helpcenter: ic_helpcenter,
+  ic_instagram: ic_instagram,
+  ic_twitter: ic_twitter,
+  ic_website: ic_website,
+  icon_fb: icon_fb,
+
+
   //image
   avatar: avatar,
   image: image,
   slider: slider,
-  
- 
+
+
 };
 
 export default Icons;

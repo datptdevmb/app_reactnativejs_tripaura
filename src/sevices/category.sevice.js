@@ -8,6 +8,7 @@ class Category {
 
     getCategories = async ()=>{
         try {
+
             const response = await axios.get(CATEGORY_API);
             this.tours = response
             return this.tours;

@@ -24,10 +24,10 @@ const Accordion = ({ title, sections }) => {
                     {sections.map((section, index) => (
                         <View key={index} style={styles.subSection}>
                             {/* Tiêu đề phụ */}
-                            {section?.subHeader && <Text style={styles.subHeader}>{section.subTitle}</Text>}
+                            {section.subHeader && <Text style={styles.subHeader}>{section.subHeader}</Text>}
                             {/* Nội dung của mỗi phần */}
-                            {section.content.map((item, i) => (
-                                <Text key={i} style={styles.bulletPoint}>• {item}</Text>
+                            {Array.isArray(section.content) && section.content.map((item, i) => (
+                                <Text key={i} style={styles.bulletPoint}>{item}</Text>
                             ))}
                         </View>
                     ))}
@@ -54,9 +54,10 @@ const styles = StyleSheet.create({
     headerText: {
         fontWeight: 'bold',
         fontSize: 16,
+        marginStart: 5,
     },
     arrow: {
-        fontSize: 16,  // Kích thước của mũi tên
+        fontSize: 16,  
     },
     content: {
         marginTop: 10,
