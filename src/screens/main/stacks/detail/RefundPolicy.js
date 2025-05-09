@@ -8,7 +8,7 @@ const RefundPolicy = () => {
     return (
         <ScrollView style={styles.container}>
             {/* <Text style={styles.title}>Bạn cần lưu ý trước khi đặc</Text> */}
-            <Lable style={styles.mrT} lable={"Bạn cần lưu ý trước khi đặc "} />
+            <Lable style={styles.mrT} lable={"Bạn cần lưu ý trước khi đặt "} />
             <View style={styles.row}>
                 <View style={[styles.row, styles.background, styles.mr]}>
                     <IcCalendar />

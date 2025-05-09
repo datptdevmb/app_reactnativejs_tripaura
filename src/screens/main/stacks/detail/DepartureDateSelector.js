@@ -12,7 +12,7 @@ const DepartureDateSelector = ({ data, selectedDate, onSelectDate}) => {
   const renderDateItem = ({ item }) => {
     const startDate = new Date(item.startDay);
     const formattedDate = `${startDate.getDate()}/${startDate.getMonth() + 1}`;
-
+    console.log('iteam ', item);
     return (
       <TouchableOpacity
         style={[
@@ -20,7 +20,7 @@ const DepartureDateSelector = ({ data, selectedDate, onSelectDate}) => {
           selectedDate === item.startDay && styles.selectedDateItem,
         ]}
         onPress={() => {
-          onSelectDate(item.startDay, item._id); 
+          onSelectDate(item.startDay, item._id,item.minTicket,item.maxTicket); 
           setOptionId(item._id);
         }}
       >
@@ -37,19 +37,18 @@ const DepartureDateSelector = ({ data, selectedDate, onSelectDate}) => {
   };
 
   console.log("optionId",optionId);
-  
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Ngày khởi hành hiện có</Text>
       <FlatList
-        data={showAll ? data : data.slice(0, 4)}
+        data={showAll ? data : data?.slice(0, 4) || []}
         renderItem={renderDateItem}
         keyExtractor={(item, index) => index.toString()}
         horizontal
         showsHorizontalScrollIndicator={false}
       />
-      {!showAll && data.length > 4 && (
+      {!showAll && data?.length > 4 && (
         <TouchableOpacity onPress={handleShowAll} style={styles.showAllButton}>
           <Text style={styles.showAllText}>Xem tất cả</Text>
         </TouchableOpacity>

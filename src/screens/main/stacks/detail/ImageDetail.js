@@ -1,62 +1,53 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { useSelector } from "react-redux";
-import ImageList from "./ImageList";
+import React from 'react';
+import {View, StyleSheet, Text, TouchableOpacity} from 'react-native';
+import {useSelector} from 'react-redux';
+import ImageListCarousel from './ImageListCarousel';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
-function ImageDetail({ navigation }) {
+function ImageDetail({navigation}) {
+  const {tourById} = useSelector(state => state.reducer.tour);
+  const {imges} = tourById;
 
-    const { tourById, } = useSelector((state) => state.reducer.tour);
-    const {
-        imges,
-    } = tourById;
-    console.log(imges[0])
-    function handleCickToFull() {
-        navigation.navigate('Ponorama')
-    }
-    return (
-        <View
-            style={styles.container}>
-            <TouchableOpacity
-                onPress={handleCickToFull}
-                style={styles.btnCon}>
-                <Text style={styles.textStyle}>Xem Toan canh</Text>
-            </TouchableOpacity>
-            <Image
-                style={styles.imageStyle}
-                source={{ uri: imges[0] }} />
-                <View>
-                    
-                </View>
-            <ImageList dataimage={imges} />
+  function handleClickToFull() {
+    navigation.navigate('Ponorama');
+  }
 
-        </View>
-    )
+  return (
+    <SafeAreaView style={styles.safeArea}>
+      <View style={styles.container}>
+        <TouchableOpacity onPress={handleClickToFull} style={styles.btnCon}>
+          <Text style={styles.textStyle}>Xem toàn cảnh</Text>
+        </TouchableOpacity>
+        <ImageListCarousel dataimage={imges} />
+      </View>
+    </SafeAreaView>
+  );
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: 'black',
-        justifyContent: "center",
-        alignItems: 'center'
-    },
-    imageStyle: {
-        marginTop:250,
-        width: '100%',
-        height: 250,
-        resizeMode: 'cover'
-    },
-    btnCon: {
-        position: "absolute",
-        right: 16,
-        top: 200,
-        padding: 20,
+  safeArea: {
+    flex: 1,
+    backgroundColor: '#262c36', // Nền tối cho phần safe area
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  container: {
+    flex: 1,
+    backgroundColor: '#262c36', // Nền tối cho phần chính
+  },
+  //   btnCon: {
+  //     position: 'absolute',
+  //     top: 40, // Điều chỉnh vị trí của nút để tránh che ảnh
+  //     padding: 20,
+  //     backgroundColor: 'rgba(0, 0, 0, 0.7)', // Nền tối bán trong suốt cho nút
+  //     borderRadius: 5,
+  //   },
+  textStyle: {
+    marginLeft: 320,
+    marginTop: 100,
+    color: '#848d97',
+    fontSize: 14,
+  },
+});
 
-    },
-
-    textStyle: {
-        marginBottom: 100,
-        color: 'white'
-    }
-})
-
-export default ImageDetail
+export default ImageDetail;

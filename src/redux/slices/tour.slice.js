@@ -29,7 +29,7 @@ export const fetchTourById = createAsyncThunk(
       // Giả sử API trả về đúng định dạng
       const tour = response.data[0];
       const { tourName, description, images, locations, details } = tour;
-     
+
       // Chuẩn bị dữ liệu để trả về
       const imges = images?.linkImage || '';
       const location = locations.destination;
@@ -44,7 +44,7 @@ export const fetchTourById = createAsyncThunk(
         location,
         details,
         adultPrice,
-        childPrice
+        childPrice,
       };
     } catch (error) {
       console.error('Fetch tour by ID failed:', error);
@@ -110,6 +110,16 @@ const tourSlice = createSlice({
     setSelectedDate: (state, action) => {
       state.selectedDate = action.payload;
     },
+    clearTourData: (state) => {
+      state.adultTickets = 0;
+      state.childTickets = 0;
+      state.adultPrice = 0;
+      state.childPrice = 0;
+      state.totalPrice = 0;
+      state.selectedDate = null;
+      state.loading = false;
+      state.err = null;
+    },
   },
   extraReducers: builder => {
     builder
@@ -150,6 +160,7 @@ const tourSlice = createSlice({
 });
 
 export const {
+  clearTourData,
   setPrices,
   setSelectedDate,
   increaseAdultTicket,

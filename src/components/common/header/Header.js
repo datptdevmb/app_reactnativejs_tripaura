@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
     },
     title: {
         fontSize: 18,
-        color: '#8A8A8A',
+        color: '#000',
         fontFamily: 'Lato',
         fontWeight: '700',
     },

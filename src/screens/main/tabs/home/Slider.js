@@ -20,7 +20,7 @@ const Slider = (({images}) => {
 const styles = StyleSheet.create({
     itemSwiper: {
         resizeMode: 'cover',
-        borderRadius: 30,
+        borderRadius: 12,
         flex: 1,
       },
 })

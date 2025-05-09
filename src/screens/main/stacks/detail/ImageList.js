@@ -1,21 +1,26 @@
 import React from 'react';
-import { View, Image, StyleSheet, ScrollView } from 'react-native';
+import {
+  View,
+  Image,
+  StyleSheet,
+  ScrollView,
+  FlatList,
+  TouchableOpacity,
+} from 'react-native';
 
-
-const ImageList = ({ dataimage }) => {
+const ImageList = ({ dataimage, handleImagePress }) => {
   return (
-    <ScrollView
-    horizontal>
-      <View style={styles.containerItemImage}>
-        {dataimage &&
-          dataimage.map((item, index) => (
-            <View key={index}>
-              <Image style={styles.itemImage} source={{ uri: item }} />
-            </View>
-          ))}
-      </View>
-    </ScrollView>
-
+    <FlatList
+      showsHorizontalScrollIndicator={false}
+      data={dataimage}
+      keyExtractor={(item, index) => index.toString()}
+      horizontal
+      renderItem={({ item, index }) => (
+        <TouchableOpacity onPress={() => handleImagePress(item)}>
+          <Image source={{ uri: item }} style={styles.itemImage} />
+        </TouchableOpacity>
+      )}
+    />
   );
 };
 
@@ -29,6 +34,7 @@ const styles = StyleSheet.create({
     width: 94,
     height: 72,
     marginEnd: 2,
+    margin: 1,
   },
 });
 

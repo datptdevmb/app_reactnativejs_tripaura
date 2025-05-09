@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import { StyleSheet } from 'react-native';
 import colors from '../../../constants/colors';
 import FONTSIZE from '../../../constants/fontsize';
 
@@ -11,7 +11,7 @@ const stylesdown = StyleSheet.create({
     containerpicker: {
         display: 'flex',
         flexDirection: 'row',
-        justifyContent:'space-between'
+        justifyContent: 'space-between'
     },
     contentchon: {
         display: 'flex',
@@ -32,10 +32,10 @@ const stylesdown = StyleSheet.create({
         color: colors.Grey_800,
         marginBottom: 5,
     },
-    dropdown:{
+    dropdown: {
         marginStart: 5,
         marginEnd: 5,
     }
 });
-  
-  export default stylesdown;
+
+export default stylesdown;

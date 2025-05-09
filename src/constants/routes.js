@@ -4,7 +4,9 @@ export const ROUTES = {
   profile: 'Tôi',
   settings: 'Cài đặt',
   favorite: 'Yêu thích',
-  login :'Login',
-  detail:'Detail',
+  login: 'Login',
+  detail: 'Detail',
   loginScreen: 'LoginScreen',
+  search: 'Tìm kiếm',
+  schedule: 'Lịch trình'
 };

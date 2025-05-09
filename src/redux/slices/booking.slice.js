@@ -20,12 +20,14 @@ export const fetchBookingsByUserId = createAsyncThunk(
     async (userId, { rejectWithValue }) => {
         try {
             const response = await fetch(`https://trip-aura-server.vercel.app/booking/api/bookinguser/${userId}`);
+            console.log('response', response);
+            
             if (!response.ok) {
                 throw new Error('Failed to fetch bookings for user');
             }
-            return await response.json(); 
+            return await response.json();
         } catch (error) {
-            return rejectWithValue(error.message); 
+            return rejectWithValue(error.message);
         }
     }
 );
@@ -47,9 +49,9 @@ export const fetchBooking = createAsyncThunk('booking/fetchBooking', async (data
 
 const initialState = {
     bookings: [],
-    bookingData: null, 
-    loading: false, 
-    err: null, 
+    bookingData: null,
+    loading: false,
+    err: null,
 };
 
 const bookingSlice = createSlice({
@@ -58,23 +60,23 @@ const bookingSlice = createSlice({
     reducers: {},
     extraReducers: (builder) => {
         builder.addCase(fetchBookingById.fulfilled, (state, action) => {
-            state.bookingData = action.payload; 
-            state.loading = false; 
+            state.bookingData = action.payload;
+            state.loading = false;
         });
         builder.addCase(fetchBookingById.pending, (state) => {
-            state.loading = true; 
+            state.loading = true;
         });
         builder.addCase(fetchBookingById.rejected, (state, action) => {
-            state.loading = false; 
+            state.loading = false;
             state.err = action.error.message;
         });
 
         builder.addCase(fetchBookingsByUserId.fulfilled, (state, action) => {
-            state.bookings = action.payload.data; 
-            state.loading = false; 
+            state.bookings = action.payload.data;
+            state.loading = false;
         });
         builder.addCase(fetchBookingsByUserId.pending, (state) => {
-            state.loading = true; 
+            state.loading = true;
         });
         builder.addCase(fetchBookingsByUserId.rejected, (state, action) => {
             state.loading = false;
@@ -83,14 +85,14 @@ const bookingSlice = createSlice({
 
 
         builder.addCase(fetchBooking.fulfilled, (state, action) => {
-            state.bookings = action.payload; 
+            state.bookings = action.payload;
             state.loading = false;
         });
         builder.addCase(fetchBooking.pending, (state) => {
-            state.loading = true; 
+            state.loading = true;
         });
         builder.addCase(fetchBooking.rejected, (state, action) => {
-            state.loading = false; 
+            state.loading = false;
             state.err = action.error.message;
         });
     },

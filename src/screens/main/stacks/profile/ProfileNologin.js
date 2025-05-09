@@ -2,11 +2,12 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import Button from '../../../../components/common/button/Button'
 import Icons from '../../../../constants/Icons';
+import { ROUTES } from '../../../../constants/routes';
 
 const SettingScreen = (props) => {
   const { navigation, route } = props;
   const nhanDangNhapNe = () => {
-    navigation.native("LoginRegisterScreen")
+    navigation.navigate(ROUTES.login);
   }
 
   return (

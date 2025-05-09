@@ -1,11 +1,12 @@
+
 import React, { useState } from 'react';
+
 import { View, StyleSheet } from 'react-native';
 import InputComponent from '../../../components/common/input/InputCompoment';
 import Lable from '../../../components/common/labelText';
 import Button from '../../../components/common/button/Button';
 
 const ContactInfo = () => {
-
     return (
         <View style={styles.container}>
 
@@ -25,6 +26,7 @@ const ContactInfo = () => {
             <Button
                 label='Tải từ hồ sơ'
                 style={styles.btn} />
+
         </View>
     );
 };
@@ -35,6 +37,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 16,
         paddingVertical: 16,
         marginTop: 6,
+
         flex: 1,
     },
     input: {
@@ -47,6 +50,7 @@ const styles = StyleSheet.create({
         height: 44,
         width: 90,
     },
+
 });
 
 export default ContactInfo;

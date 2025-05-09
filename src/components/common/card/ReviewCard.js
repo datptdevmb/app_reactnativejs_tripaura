@@ -2,6 +2,7 @@ import { Image, StyleSheet, Text } from "react-native";
 import { View } from "react-native";
 import Ic_star from "../../../assets/icons/Ic_star"
 import { Rating } from 'react-native-ratings';
+import formatDate from "../../../untils/formatDate";
 
 
 
@@ -16,21 +17,21 @@ function ReviewCard({ review }) {
                     <>
                         <View style={styles.flexRow}>
                             <Image
-                                source={require('../../../assets/images/avatar.png')}
+                                source={{uri:review.avatar}}
                                 style={styles.image} />
                             <View style={styles.mr_start_12}>
-                                <Text style={styles.lable}> {review.name}</Text>
-                                <Text style={styles.subLable}>{review.date}</Text>
+                                <Text style={styles.lable}> {review.fullname}</Text>
+                                <Text style={styles.subLable}>{formatDate(review.dayReview)}</Text>
                             </View>
                         </View>
 
                         <Rating
                             style={styles.rating}
-                            ratingCount={5}
+                            ratingCount={review.rating}
                             startingValue={5}
                             imageSize={14} />
 
-                        <Text style={styles.bodyText}> {review?.reviewText} </Text>
+                        <Text style={styles.bodyText}> {review?.comment} </Text>
                     </>
                 </View>
             }
@@ -42,7 +43,7 @@ function ReviewCard({ review }) {
 
 const styles = StyleSheet.create({
     container: {
-        width: '100%',
+        width: 300,
         height: 131,
         backgroundColor: "#F8F8F8",
         justifyContent: "center",
@@ -55,7 +56,7 @@ const styles = StyleSheet.create({
         marginTop: 10
     },
     lable: {
-        fontSize: 16,
+        fontSize: 12,
         fontFamily: 'Poppins_Regular',
         color: '#38434A'
     },

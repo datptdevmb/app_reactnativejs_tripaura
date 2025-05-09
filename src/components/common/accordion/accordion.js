@@ -1,79 +1,88 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useState, useRef } from 'react';
+import {
+    View,
+    Text,
+    TouchableOpacity,
+    Animated,
+    StyleSheet,
+} from 'react-native';
 
-const Accordion = ({ title, sections }) => {
-    const [isExpanded, setIsExpanded] = useState(false);
+const Accordion = ({ title, children }) => {
+    const [isOpen, setIsOpen] = useState(false);
+    const animation = useRef(new Animated.Value(0)).current;
+    const [contentHeight, setContentHeight] = useState(0);
 
     const toggleAccordion = () => {
-        setIsExpanded(!isExpanded);
+        setIsOpen(!isOpen);
+        Animated.timing(animation, {
+            toValue: isOpen ? 0 : 1,
+            duration: 300,
+            useNativeDriver: false,
+        }).start();
     };
+
+    const maxHeight = animation.interpolate({
+        inputRange: [0, 1],
+        outputRange: [0, contentHeight],
+    });
+
+    const rotateIcon = animation.interpolate({
+        inputRange: [0, 1],
+        outputRange: ['0deg', '180deg'], 
+    });
 
     return (
         <View style={styles.container}>
-            {/* Phần tiêu đề của Accordion */}
             <TouchableOpacity onPress={toggleAccordion} style={styles.header}>
                 <Text style={styles.headerText}>{title}</Text>
-                <Text style={styles.arrow}>
-                    {isExpanded ? '▲' : '▼'}
-                </Text>
+                <Animated.View style={{ transform: [{ rotate: rotateIcon }] }}>
+                    <Text style={styles.icon}>{isOpen ? '▲' : '▼'}</Text>
+                </Animated.View>
             </TouchableOpacity>
-
-            {/* Nội dung mở rộng với tiêu đề phụ */}
-            {isExpanded && (
-                <View style={styles.content}>
-                    {sections.map((section, index) => (
-                        <View key={index} style={styles.subSection}>
-                            {/* Tiêu đề phụ */}
-                            {section.subHeader && <Text style={styles.subHeader}>{section.subHeader}</Text>}
-                            {/* Nội dung của mỗi phần */}
-                            {Array.isArray(section.content) && section.content.map((item, i) => (
-                                <Text key={i} style={styles.bulletPoint}>{item}</Text>
-                            ))}
-                        </View>
-                    ))}
+            <Animated.View style={[styles.content, { height: maxHeight }]}>
+                <View
+                    style={styles.innerContent}
+                    onLayout={(event) => {
+                        const { height } = event.nativeEvent.layout;
+                        setContentHeight(height); 
+                    }}
+                >
+                    {children}
                 </View>
-            )}
+            </Animated.View>
         </View>
     );
 };
 
 const styles = StyleSheet.create({
     container: {
-        borderWidth: 1,
-        borderColor: '#ccc',
+        marginBottom: 10,
+        borderBottomWidth: 1,
+        borderColor: '#ddd',
         borderRadius: 5,
-        padding: 10,
-        marginVertical: 10,
+        overflow: 'hidden',
     },
     header: {
+        padding: 15,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        paddingVertical: 5,
     },
     headerText: {
-        fontWeight: 'bold',
+        color: 'grey',
         fontSize: 16,
-        marginStart: 5,
     },
-    arrow: {
-        fontSize: 16,  
+    icon: {
+        color: 'black',
+        fontSize: 16,
+        fontWeight: 'bold',
     },
     content: {
-        marginTop: 10,
-        paddingHorizontal: 5,
+        overflow: 'hidden',
     },
-    subSection: {
-        marginBottom: 10,
-    },
-    subHeader: {
-        fontWeight: 'bold',
-        fontSize: 14,
-        marginBottom: 5,
-    },
-    bulletPoint: {
-        fontSize: 14,
-        marginBottom: 5,
+    innerContent: {
+        padding: 15,
+        backgroundColor: '#EDEDED',
     },
 });
 

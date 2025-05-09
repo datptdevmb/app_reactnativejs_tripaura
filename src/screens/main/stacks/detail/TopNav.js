@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View } from "react-native"
 import Ic_ouFavorite from "../../../../assets/icons/ic_ouline_Favorite"
 import IcleftArrow from "../../../../assets/icons/Ic_leftArrow"
+import colors from "../../../../constants/colors"
 
 const TopNav = ({ tourName }) => {
 
@@ -20,10 +21,10 @@ const TopNav = ({ tourName }) => {
 }
 
 export default TopNav
-
+// '#2196F3'
 const styles = StyleSheet.create({
     navBar: {
-        backgroundColor: '#2196F3',
+        backgroundColor:colors.primary_600,
         width: '100%',
         position:'absolute',
         flexDirection:'row',

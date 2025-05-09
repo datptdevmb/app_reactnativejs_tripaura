@@ -12,7 +12,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { useDispatch, useSelector } from 'react-redux';
 import { FilterTour } from '../../../redux/slices/filterTourSlice';
 
-const ModalFilter = ({ searchText,onPressAply }) => {
+const ModalFilter = ({ searchText, isShowModal }) => {
     const [selectedRegion, setSelectedRegion] = useState('');
     const [selectedPrice, setSelectedPrice] = useState('');
     const [minPrice, setMinPrice] = useState('');
@@ -25,7 +25,7 @@ const ModalFilter = ({ searchText,onPressAply }) => {
     const { filterTourData, filterTourStatus } = useSelector((state) => state.reducer.filterTour);
     const dispatch = useDispatch();
 
-    useEffect(() => {
+    const onPressAply = () => {
         dispatch(
             FilterTour({
                 tourName: searchText,
@@ -34,9 +34,9 @@ const ModalFilter = ({ searchText,onPressAply }) => {
                 minPrice: minPrice,
                 maxPrice: maxPrice
             })
-        )
-
-    }, [searchText, startDate, selectedRegion, minPrice, maxPrice]);
+        ),
+            isShowModal()
+    }
     const regions = ['Hà Nội', 'Hồ Chí Minh', 'Đà Nẵng', 'Quảng Bình', 'Nghệ An'];
     const prices = [
         { '_id': 1, 'name': 'Dưới 1 triệu' },
@@ -72,8 +72,6 @@ const ModalFilter = ({ searchText,onPressAply }) => {
             setMaxPrice('1000000')
             console.log(maxPrice);
             console.log(minPrice);
-
-
         }
         if (_id == 2) {
             setMaxPrice('2000000')
@@ -86,9 +84,7 @@ const ModalFilter = ({ searchText,onPressAply }) => {
         if (_id == 4) {
             setMinPrice('4000000')
         }
-
     }
-
 
     const clearFilters = () => {
         setSelectedRegion('');
@@ -172,7 +168,7 @@ const ModalFilter = ({ searchText,onPressAply }) => {
                         <Text style={{ fontSize: 18, fontWeight: 'bold', textDecorationLine: 'underline', color: 'black' }}>Xóa</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.applyButton} onPress={onPressAply}>
-                        <Text style={styles.applyButtonText}>Áp Dụng {filterTourData.data.length} kết quả</Text>
+                        <Text style={styles.applyButtonText}>Áp Dụng</Text>
                     </TouchableOpacity>
                 </View>
             </View>

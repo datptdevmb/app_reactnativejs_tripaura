@@ -38,14 +38,14 @@ const DropdownComponent = ({ selectedProvince: selectedProvinceProp, selectedDis
 
 
         setSelectedProvince(value);
-        setSelectedDistrict(null); 
-        onProvinceSelect(value); 
+        setSelectedDistrict(null);
+        onProvinceSelect(value);
 
     };
 
     const handleDistrictChange = (value) => {
         setSelectedDistrict(value);
-        onDistrictSelect(value); 
+        onDistrictSelect(value);
 
     };
 

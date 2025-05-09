@@ -6,7 +6,7 @@ const PromotionScreen = () => {
   return (
     <View>
       <Headercomponet
-        title={"Ưu đãi"}
+        title={" import paymentReducer from'./slices/paymentSlice;"}
       />
       
     </View>

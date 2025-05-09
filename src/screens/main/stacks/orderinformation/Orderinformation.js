@@ -1,21 +1,18 @@
+import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, ScrollView, ActivityIndicator, Image } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchBookingById } from '../../../../redux/slices/booking.slice';
-import Icons from '../../../../constants/Icons';
 import Header from '../../../../components/common/header/Header';
+import Icons from '../../../../constants/Icons';
+import { fetchBookingById } from '../../../../redux/slices/booking.slice';
 
 const OrderInformation = ({ route, navigation }) => {
   const dispatch = useDispatch();
   const { bookingId } = route.params;
-
-
   const [loading, setLoading] = useState(true);
 
-
   const bookingData = useSelector((state) => state.reducer.booking);
-  console.log('Redux Booking Data:', bookingData);
-  
+
+
 
   useEffect(() => {
     if (bookingId) {
@@ -30,65 +27,94 @@ const OrderInformation = ({ route, navigation }) => {
   }, [bookingData]);
 
   if (loading) {
-    return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#2980B9" />
-      </View>
-    );
+    return <Text style={styles.loadingText}>Đang tải...</Text>;
   }
 
   if (!bookingData || !bookingData.bookingData) {
     return <Text style={styles.errorText}>Không có dữ liệu đặt tour</Text>;
   }
+
   const booking = bookingData?.bookingData?.data;
 
-  console.log('booking', booking);
-  const formattedDate = new Date(booking.createAt).toLocaleDateString('vi-VN', {
+  const formattedDate = new Date(booking.detailInfo.endDay).toLocaleDateString('vi-VN', {
     year: 'numeric',
     month: '2-digit',
     day: '2-digit',
   });
 
+  const formatCurrency = (amount) => {
+    return new Intl.NumberFormat('vi-VN', {
+      style: 'currency',
+      currency: 'VND',
+    }).format(amount);
+  };
+
   const onBackPress = function () {
-    navigation.navigate('MainTabNavigation')
-  }
+    navigation.navigate('MainTabNavigation');
+  };
 
-  const image = booking?.linkImage?.[0];  
-  console.log('First Image URL:', image);
+  const image = booking?.tourImages?.[0]?.linkImage?.[0];
+  const totalCost = (booking?.numAdult * booking?.priceAdult) + (booking?.numChildren * booking?.priceChildren);
+  console.log('Total cost:', totalCost);
+  const statusText = booking.status === 0 ? 'Đã thanh toán' : booking.status === 1 ? 'Chưa thanh toán' : 'Đã hủy';
 
-  console.log('fullname', booking?.fullname);
-  console.log('email', booking?.email);
-  console.log('phone', booking?.phone);
-  console.log('tourName', booking?.tourName);
+  const handlePaymentPress = () => {
+    navigation.navigate('Order', {
+      bookingId: bookingId
+    });
+  };
+
 
   return (
     <ScrollView style={styles.container}>
       <Header
         onBackPress={onBackPress}
-        title="Chi tiết thanh toán" />
+        title="Chi tiết thanh toán"
+      />
       <View style={styles.containerformation}>
         <View style={styles.card}>
           <Text style={styles.sectionTitle}>Thông tin khách hàng</Text>
-          <Text style={styles.infoText}>Tên khách hàng: <Text style={styles.highlight}>{booking.fullname || 'N/A'}</Text></Text>
-          <Text style={styles.infoText}>Email: <Text style={styles.highlight}>{booking.email || 'N/A'}</Text></Text>
-          <Text style={styles.infoText}>Số điện thoại: <Text style={styles.highlight}>{booking.phone || 'Không có'}</Text></Text>
+          <Text style={styles.infoText}>Tên khách hàng: <Text style={styles.highlight}>{booking?.userInfo?.fullname || 'N/A'}</Text></Text>
+          <Text style={styles.infoText}>Email: <Text style={styles.highlight}>{booking?.userInfo?.email || 'N/A'}</Text></Text>
+          <Text style={styles.infoText}>Số điện thoại: <Text style={styles.highlight}>{booking?.userInfo?.phone || 'Không có'}</Text></Text>
         </View>
 
         <View style={styles.card}>
           <Text style={styles.sectionTitle}>Chi tiết đơn hàng</Text>
-          <Text style={styles.infoText}>Tour: <Text style={styles.highlight}>{booking.tourName || 'N/A'}</Text></Text>
+          <Text style={styles.infoText}>Tour: <Text style={styles.highlight}>{booking?.tourInfo?.tourName || 'N/A'}</Text></Text>
           <Image source={{ uri: image }} style={styles.image} />
+          {/* <Text style={styles.infoText}>Chi tiết tour: <Text style={styles.highlight}>{booking?.tourInfo?.description || 'N/A'}</Text></Text> */}
           <Text style={styles.infoText}>Số lượng người lớn: <Text style={styles.highlight}>{booking.numAdult || 0}</Text></Text>
           <Text style={styles.infoText}>Số lượng trẻ em: <Text style={styles.highlight}>{booking.numChildren || 0}</Text></Text>
-          <Text style={styles.infoText}>Ngày đặt: <Text style={styles.highlight}>{formattedDate || 'N/A'}</Text></Text>
-          <Text style={styles.infoText}>Giá tour người lớn: <Text style={styles.highlight}>{booking.priceAdult || 'N/A'}</Text></Text>
-          <Text style={styles.infoText}>Giá tour trẻ em: <Text style={styles.highlight}>{booking.priceChildren || 'N/A'}</Text></Text>
+          <Text style={styles.infoText}>Ngày đ: <Text style={styles.highlight}>{formattedDate || 'N/A'}</Text></Text>
+          <Text style={styles.infoText}>
+            Giá tour người lớn: <Text style={styles.highlight}>{formatCurrency(booking?.priceAdult) || 'N/A'}</Text>
+          </Text>
+          <Text style={styles.infoText}>
+            Giá tour trẻ em: <Text style={styles.highlight}>{formatCurrency(booking?.priceChildren) || 'N/A'}</Text>
+          </Text>
+          <Text style={styles.totalText}>
+            Tổng tiền <Text style={styles.highlight}>{formatCurrency(booking?.totalPrice) || 'N/A'}</Text>
+          </Text>
         </View>
 
         <View style={styles.card}>
           <Text style={styles.sectionTitle}>Thông tin thanh toán</Text>
           <Text style={styles.infoText}>Phương thức thanh toán: <Text style={styles.highlight}>Thanh toán qua ngân hàng</Text></Text>
-          <Text style={[styles.infoText, styles.statusText]}>Tình trạng: <Text style={styles.highlight}>{booking.status === 1 ? 'Chưa thanh toán' : booking.status === 0 ? 'Đã thanh toán' : 'N/A'}</Text></Text>
+          <View style={styles.statusTextContainer}>
+            <Text style={[styles.infoText, styles.statusText]}>Tình trạng: <Text style={styles.highlight}>{statusText}</Text></Text>
+            {booking.status === 0 && (
+              <TouchableOpacity style={styles.buttonCancel} onPress={() => navigation.navigate('CancelOrderinfomation')}>
+                <Text style={styles.buttonText}>Hủy đơn hàng</Text>
+              </TouchableOpacity>
+            )}
+
+            {booking.status === 2 && (
+              <TouchableOpacity style={styles.button} onPress={handlePaymentPress}>
+                <Text style={styles.buttonText}>Mua lại</Text>
+              </TouchableOpacity>
+            )}
+          </View>
         </View>
       </View>
     </ScrollView>
@@ -99,8 +125,8 @@ export default OrderInformation;
 
 const styles = StyleSheet.create({
   container: {
-    width: '100%',
-    height: '100%',
+    flex: 1,
+    backgroundColor: '#F0F4F8',
   },
   containerformation: {
     padding: 15,
@@ -133,6 +159,12 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     lineHeight: 24,
   },
+  totalText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#E74C3C',
+    marginBottom: 15,
+  },
   statusText: {
     color: '#27AE60',
     fontWeight: '600',
@@ -140,18 +172,6 @@ const styles = StyleSheet.create({
   highlight: {
     fontWeight: 'bold',
     color: '#2980B9',
-  },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: '100%',
-  },
-  errorText: {
-    color: 'red',
-    fontSize: 18,
-    textAlign: 'center',
-    marginTop: 20,
   },
   image: {
     width: '100%',
@@ -162,4 +182,38 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#D1D8E0',
   },
+  loadingText: {
+    fontSize: 16,
+    color: '#34495E',
+    textAlign: 'center',
+    marginTop: 20,
+  },
+  errorText: {
+    fontSize: 16,
+    color: 'red',
+    textAlign: 'center',
+    marginTop: 20,
+  },
+  statusTextContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between'
+  },
+  button: {
+    backgroundColor: '#8DEEEE',
+    width: '35%',
+    padding: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 5,
+  },
+  buttonText: {
+    color: '#000',
+    fontWeight: 'bold',
+  },
+  buttonCancel: {
+    backgroundColor: '#8DEEEE',
+    padding: 10,
+    borderRadius: 5,
+  }
 });

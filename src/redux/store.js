@@ -1,24 +1,27 @@
-
-import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import authenReducer from "./slices/auth.slice";
-import tourReducer from "./slices/tour.slice";
-import categoryReducer from './slices/category.slice'
-import networkReducer from './slices/network.slice'
-import imageSliderReducer from './slices/image.slice'
-import favoriteReducer from './slices/favouriteducers'
-import filterTourReducer from './slices/filterTourSlice'
-import searchTourReducer from './slices/searchTourSlice'
+import { combineReducers, configureStore } from '@reduxjs/toolkit';
+import authenReducer from './slices/auth.slice';
+import tourReducer from './slices/tour.slice';
+import categoryReducer from './slices/category.slice';
+import networkReducer from './slices/network.slice';
+import imageSliderReducer from './slices/image.slice';
+import favoriteReducer from './slices/favouriteducers';
+import filterTourReducer from './slices/filterTourSlice';
+import searchTourReducer from './slices/searchTourSlice';
 import changeUserReducer from './slices/ChangeUserSlice';
 import provincesReducer from './slices/cityprovince';
 import districtReducer from './slices/district';
 import getuserReducer from './slices/getUserbyID';
+import paymentReducer from './slices/paymentSlice';
+import bookingReducer from './slices/booking.slice';
 import voucherReducer from './slices/vouchersSlice';
-import reviews from './slices/reviewTourducers'
-
-
-import paymentReducer from './slices/paymentSlice'; 
-import bookingReducer from './slices/booking.slice'; 
-
+import reviewReducer from './slices/reviewTourducers';
+import schemalReducer from './slices/schemal.slice';
+import LichtrinhReducer from './slices/getlichtrinh.slice';
+import diaDiemTheoNgayReducer from './slices/diaDiemTheoNgaySlice'
+import getLichTrinhByUserIdReducer from './slices/getLichTrinhUserSlice'
+import addDiaDiemReducer from './slices/addDiaDiemSlice'
+import deleteDiaDiemReducer from './slices/deleteDiadiemSlice'
+import getDiaDiemByTinhReducer from './slices/getDiaDiemByTinhSlice'
 
 const rootReducer = combineReducers({
   tour: tourReducer,
@@ -34,38 +37,31 @@ const rootReducer = combineReducers({
   filterTour: filterTourReducer,
   searchTour: searchTourReducer,
   changeUser: changeUserReducer,
-<<<<<<< HEAD
-
-  vouchers : voucherReducer,
-
   payment: paymentReducer,
   booking: bookingReducer,
   // favoriteAdDelete: favoriteAdDeleteReducer,
   // favouriteDelete: favouriteDeleteReducer,
-
-=======
-  vouchers : voucherReducer,
-  reviews:voucherReducer
->>>>>>> aee1b1af7168e56a7fc252ee383cc92f7ccf3b19
-
-
+  vouchers: voucherReducer,
+  reviews: reviewReducer,
+  schemal: schemalReducer,
+  lichtrinh: LichtrinhReducer,
+  locationByDate: diaDiemTheoNgayReducer,
+  lichTrinhByUser: getLichTrinhByUserIdReducer,
+  deleteDiaDiem: deleteDiaDiemReducer,
+  addDiaDiem: addDiaDiemReducer,
+  diaDiemByTinh:getDiaDiemByTinhReducer
 });
 
 // Configure the store
 
 const store = configureStore({
-
-  reducer: rootReducer,
-  middleware: (getDefaultMiddleware) =>
+  reducer: {
+    reducer: rootReducer,
+  },
+  middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
       serializableCheck: false,
     }),
-
-  reducer: {
-    reducer: rootReducer,
-
-  }
 });
-
 
 export default store;

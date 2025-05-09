@@ -1,15 +1,15 @@
-import {useState, useEffect} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
-import {fetchImages} from '../redux/slices/image.slice';
-import {fetchCategory} from '../redux/slices/category.slice';
-import {fetchTours, fetchPopularTour} from '../redux/slices/tour.slice';
+import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchImages } from '../redux/slices/image.slice';
+import { fetchCategory } from '../redux/slices/category.slice';
+import { fetchTours, fetchPopularTour } from '../redux/slices/tour.slice';
 import { checkLoginStatus } from '../redux/slices/auth.slice';
 
 export const useHomeData = () => {
   const dispatch = useDispatch();
-  const {categories} = useSelector(state => state.reducer.category);
-  const {tours, popularTours} = useSelector(state => state.reducer.tour);
-  const {images} = useSelector(state => state.reducer.images);
+  const { categories } = useSelector(state => state.reducer.category);
+  const { tours, loading, popularTours } = useSelector(state => state.reducer.tour);
+  const { images } = useSelector(state => state.reducer.images);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -32,5 +32,5 @@ export const useHomeData = () => {
     loadData();
   }, [dispatch]);
 
-  return {categories, tours, popularTours, images, isLoading};
+  return { categories, tours, loading, popularTours, images, isLoading };
 };

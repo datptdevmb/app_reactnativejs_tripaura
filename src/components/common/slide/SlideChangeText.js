@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { View, Text, StyleSheet, Animated } from 'react-native';
 import colors from '../../../constants/colors';
 
-const texts = [" Nhìn Cái", "Con", "Cu"];
+const texts = ["Chào Mừng", "Đến Với", "TRIPAURA"];
 
 const SlideChangeText = () => {
     const slideAnim = useRef(new Animated.Value(0)).current;

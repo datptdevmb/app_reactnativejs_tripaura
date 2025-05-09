@@ -1,7 +1,7 @@
 import * as React from "react"
 import Svg, { Path } from "react-native-svg"
 
-function IcProfile(props) {
+function IcProfile({props,color}) {
   return (
     <Svg
       xmlns="http://www.w3.org/2000/svg"
@@ -15,7 +15,7 @@ function IcProfile(props) {
         fillRule="evenodd"
         clipRule="evenodd"
         d="M5 4a4 4 0 118 0 4 4 0 01-8 0zm0 6a5 5 0 00-5 5 3 3 0 003 3h12a3 3 0 003-3 5 5 0 00-5-5H5z"
-        fill="#A8A8A8"
+        fill={color}
       />
     </Svg>
   )

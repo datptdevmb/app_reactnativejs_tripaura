@@ -14,6 +14,7 @@ import Icons from '../../../../constants/Icons';
 import CheckBox from '@react-native-community/checkbox';
 import { fetchUserInfo } from '../../../../redux/slices/getUserbyID';
 import stylesinput from '../../../../components/common/input/inputstyle';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const EditProfileScreen = ({ navigation }) => {
   const reduxUser = useSelector((state) => state.reducer.auth.user);
@@ -21,13 +22,8 @@ const EditProfileScreen = ({ navigation }) => {
   const changeUserStatus = useSelector((state) => state.reducer.changeUser.status);
   const provinces = useSelector((state) => state.reducer.provinces.provinces);
   const districts = useSelector((state) => state.reducer.district.districts);
-
   const dispatch = useDispatch();
   const userId = reduxUser.user?._id;
-
-  console.log('userId', userId);
-  
-
   const [email, setEmail] = useState("");
   const [fullname, setFullname] = useState("");
   const [phone, setPhone] = useState("");
@@ -41,6 +37,10 @@ const EditProfileScreen = ({ navigation }) => {
   const [gender, setGender] = useState(null);
   const [showPicker, setShowPicker] = useState(false);
 
+  const [user, setUser] = useState(null);
+  console.log('userrccccccccccccccccccccccccc', user);
+
+
   const parseDateString = (dateString) => {
     if (!dateString) return null;
     const [day, month, year] = dateString.split('/');
@@ -48,27 +48,45 @@ const EditProfileScreen = ({ navigation }) => {
   };
 
   useEffect(() => {
-    if (userId) {
-      dispatch(fetchUserInfo(userId)).then((result) => {
-        if (result.payload?.success) {
-          const data = result.payload.data;
-          setEmail(data.email || '');
-          setFullname(data.fullname || '');
-          setPhone(data.phone || '');
-          setAddress(data.address?.split(',')[0] || '');
-          setGender(data.gender);
-          if (data.gender === "Nam") setIsMaleSelected(true);
-          else if (data.gender === "Nữ") setIsFemaleSelected(true);
-
-          const dateOfBirth = parseDateString(data.dateofbirth);
-          if (dateOfBirth) {
-            setDate(dateOfBirth);
-            setFormattedDate(dateOfBirth.toLocaleDateString('en-GB'));
+    const fetchUserData = async () => {
+      try {
+        const userData = await AsyncStorage.getItem('userId');
+        if (userData) {
+          const parsedData = JSON.parse(userData);
+          if (parsedData && parsedData.user) {
+            setUser(parsedData);
+          } else {
+            setUser(null);
           }
+        } else {
+          setUser(null);
         }
-      });
+      } catch (error) {
+        console.error('Lỗi khi đọc dữ liệu từ AsyncStorage:', error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
+
+  useEffect(() => {
+    if (user) {
+      const data = user.user
+      console.log('data', data);
+      setEmail(data.email || '');
+      setFullname(data.fullname || '');
+      setPhone(data.phone || '');
+      setAddress(data.address?.split(',')[0] || '');
+      setGender(data.gender);
+      if (data.gender === "Nam") setIsMaleSelected(true);
+      else if (data.gender === "Nữ") setIsFemaleSelected(true);
+      const dateOfBirth = parseDateString(data.dateofbirth);
+      if (dateOfBirth) {
+        setDate(dateOfBirth);
+        setFormattedDate(dateOfBirth.toLocaleDateString('en-GB'));
+      }
     }
-  }, [dispatch, userId]);
+  }, [user]);
 
   const handleGenderSelection = (selectedGender) => {
     setIsMaleSelected(selectedGender === "Nam");
@@ -103,11 +121,11 @@ const EditProfileScreen = ({ navigation }) => {
     setFormattedDate(currentDate.toLocaleDateString('en-GB'));
   };
 
-  const thayDoi = () => {
+  const thayDoi = async () => {
     const districtName = selectedDistrict?.name || "Chưa chọn quận huyện";
     const provinceName = selectedProvince?.name || "Chưa chọn tỉnh thành";
     const addressWithDetails = `${address}, ${districtName}, ${provinceName}`;
-    
+
     const userData = {
       userId,
       fullname,
@@ -117,7 +135,14 @@ const EditProfileScreen = ({ navigation }) => {
       dateofbirth: formattedDate,
       address: addressWithDetails,
     };
-    
+    const updatedUser = {
+      ...user, user: {
+        ...user.user, fullname: fullname, email: email, phone: phone, gender: gender || 'chưa chọn giới tính', dateofbirth: formattedDate,
+        address: addressWithDetails,
+      }
+    };
+    setUser(updatedUser);
+    await AsyncStorage.setItem('userId', JSON.stringify(updatedUser));
     dispatch(ThayDoiThongTin(userData));
   };
 

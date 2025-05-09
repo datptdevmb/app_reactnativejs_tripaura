@@ -11,7 +11,7 @@ export const XaoYeuThich = createAsyncThunk(
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({userId, tourId}), // Gửi userId và tourIds trong body
+        body: JSON.stringify({tourId}),
       },
     );
 
@@ -20,7 +20,7 @@ export const XaoYeuThich = createAsyncThunk(
 
     // Kiểm tra phản hồi từ server
     if (data.code === 200 && data.status === 'success') {
-      return tourId; // Trả về tourIds đã xóa
+      return tourId;
     } else {
       console.error('Error deleting favorite:', data);
       throw new Error(data.msg);
@@ -34,7 +34,7 @@ const favoriteSlice = createSlice({
     favoritesData: [],
     deleteData: [],
     deleteStatus: 'idle',
-    error: null, // Thêm trường error để lưu lỗi nếu có
+    error: null,
   },
   extraReducers: builder => {
     builder
@@ -43,7 +43,7 @@ const favoriteSlice = createSlice({
       })
       .addCase(XaoYeuThich.fulfilled, (state, action) => {
         state.deleteStatus = 'success';
-        const deletedTourId = action.payload; // Nhận tourId đã xóa từ payload
+        const deletedTourId = action.payload;
 
         // Cập nhật danh sách yêu thích, loại bỏ tour đã xóa
         state.favoritesData = state.favoritesData.filter(

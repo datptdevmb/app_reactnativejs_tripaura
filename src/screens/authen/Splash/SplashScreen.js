@@ -4,12 +4,11 @@ import {styles} from './SplashScreenStyle';
 
 const SplashScreen = ({navigation}) => {
   useEffect(() => {
-    // Tự động chuyển sang HomeScreen sau 5 giây
     const timer = setTimeout(() => {
-      navigation.replace('LoginRegisterScreen');
-    }, 5000);
+      navigation.replace('MainTabNavigation');
+    }, 3000);
 
-    return () => clearTimeout(timer); // Dọn dẹp khi component bị hủy
+    return () => clearTimeout(timer); 
   }, [navigation]);
 
   return (

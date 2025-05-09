@@ -1,60 +1,38 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Alert, StyleSheet, View } from 'react-native';
 import { WebView } from 'react-native-webview';
 import { useNavigation } from '@react-navigation/native';
-import Toast from 'react-native-toast-message';
+import { updateBookingStatus, updateMaxTicket } from '../../../../sevices/apiServices';
+import { clearTourData } from '../../../../redux/slices/tour.slice'
+import { useDispatch } from 'react-redux';
+
 
 const PaymentScreen = ({ route }) => {
   const { url, bookingId } = route.params;
-
-  console.log('bookingIdddd', bookingId);
+  const [maxTicketState, setMaxTicketState] = useState(route.params.maxTicket);
+  const [childTicketsState, setChildTickets] = useState(route.params.childTickets);
+  const [adultTicketsState, setAdultTickets] = useState(route.params.adultTickets);
+  const [detailId, setDetailId] = useState(route.params.detailId);
 
   const navigation = useNavigation();
-
-  const updateBookingStatus = async (status) => {
-    console.log('Updating booking status with:', status);
-    try {
-      const response = await fetch(`https://trip-aura-server.vercel.app/booking/api/update/${bookingId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ status }),
-      });
-      const data = await response.json();
-      if (data.code === 200) {
-        console.log('Thành công');
-
-      } else {
-        console.error('Thất bại');
-      }
-    } catch (error) {
-      console.error('Error updating booking status:', error);
-      Toast.show({
-        type: 'error',
-        text1: 'Có lỗi xảy ra khi cập nhật',
-      });
-    }
-  };
+  const dispatch = useDispatch();
+  const ticker = maxTicketState - ((childTicketsState || 0) + (adultTicketsState || 0));
 
   const handleNavigationChange = (navState) => {
     const { url } = navState;
-
-    console.log('Current URL:', url);
     if (url.includes('/payment/success')) {
-      console.log('Navigation detected success URL');
       Alert.alert('Thành công', 'Bạn đã thanh toán thành công');
-
-      updateBookingStatus('success');
-
-      setTimeout(() => {
-        navigation.navigate('OrderInformation', { bookingId });
-      }, 0);
+      updateBookingStatus(bookingId, 'success');
+      
+      updateMaxTicket(detailId, ticker);
+      setTimeout(() => navigation.navigate('MainTabNavigation'), 1000);
+      dispatch(clearTourData())
     } else if (url.includes('/payment/cancel')) {
-      console.log('Navigation detected cancel URL');
       Alert.alert('Thất bại', 'Đã hủy thanh toán.');
-      updateBookingStatus('cancel');
-      navigation.navigate('MainTabNavigation');
+     
+      updateBookingStatus(bookingId, 'cancel');
+      setTimeout(() => navigation.navigate('MainTabNavigation'), 1000);
+      dispatch(clearTourData())
     }
   };
 
@@ -70,7 +48,6 @@ const PaymentScreen = ({ route }) => {
           Alert.alert('Thất bại', 'Lỗi Thanh toán');
         }}
       />
-      <Toast />
     </View>
   );
 };

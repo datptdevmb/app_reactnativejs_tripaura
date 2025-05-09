@@ -14,14 +14,14 @@ import { styles } from './FilterScreenStyle';
 import { useDispatch, useSelector } from 'react-redux';
 import { FilterTour } from '../../../../redux/slices/filterTourSlice';
 
-const FilterScreen = (props) => {
-    const { navigation } = props
+const FilterScreen = ({ props, route, navigation, searchText }) => {
+    
+
     const [selectedRegion, setSelectedRegion] = useState('');
     const [selectedPrice, setSelectedPrice] = useState('');
     const [minPrice, setMinPrice] = useState('');
     const [maxPrice, setMaxPrice] = useState('');
     const [startDate, setStartDate] = useState(new Date());
-    const [endDate, setEndDate] = useState(new Date());
     const [showStartDatePicker, setShowStartDatePicker] = useState(false);
     const [showEndDatePicker, setShowEndDatePicker] = useState(false);
     const [showRegionPicker, setShowRegionPicker] = useState(false);
@@ -30,18 +30,17 @@ const FilterScreen = (props) => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        if (filterTourStatus === 'succeeded') {
-            const { status, message, data } = filterTourData;
-            if (filterTourData.status == "success") {
+        dispatch(
+            FilterTour({
+                tourName: searchText,
+                startDate: startDate,
+                destination: selectedRegion,
+                minPrice: minPrice,
+                maxPrice: maxPrice
+            })
+        )
 
-                // ToastAndroid.show("Cập nhật thành công!", ToastAndroid.SHORT);
-                // navigation.goBack();
-            } else {
-                // ToastAndroid.show("Không tìm thấy tour", ToastAndroid.SHORT);
-            }
-        }
-
-    }, [filterTourData, filterTourStatus]);
+    }, [searchText, startDate, selectedRegion, minPrice, maxPrice]);
     const regions = ['Hà Nội', 'Hồ Chí Minh', 'Đà Nẵng', 'Quảng Bình', 'Nghệ An'];
     const prices = [
         { '_id': 1, 'name': 'Dưới 1 triệu' },
@@ -57,12 +56,6 @@ const FilterScreen = (props) => {
         setShowStartDatePicker(false);
     };
 
-    const onChangeEndDate = (event, selectedDate) => {
-        if (event.type === 'set') {
-            setEndDate(selectedDate);
-        }
-        setShowEndDatePicker(false);
-    };
 
     const renderDropdown = (title, isOpen, onPress) => (
         <TouchableOpacity style={styles.dropdownContainer} onPress={onPress}>
@@ -101,30 +94,13 @@ const FilterScreen = (props) => {
     }
 
     const applyFilters = () => {
-
-        dispatch(
-            FilterTour({
-                destination: selectedRegion,
-                startDate: startDate,
-                destination: selectedRegion,
-                minPrice: minPrice,
-                maxPrice: maxPrice
-            })
-        )
-        navigation.navigate('ListTourFilter')
-        console.log('Áp dụng với:', {
-            selectedRegion,
-            selectedPrice,
-            startDate,
-            endDate,
-        });
+        navigation.goBack()
     };
 
     const clearFilters = () => {
         setSelectedRegion('');
         setSelectedPrice('');
         setStartDate(new Date());
-        setEndDate(new Date());
         setShowRegionPicker(false);
         setShowPricePicker(false);
         setShowStartDatePicker(false);
@@ -176,11 +152,6 @@ const FilterScreen = (props) => {
                 () => setShowStartDatePicker(true),
             )}
 
-            {renderDropdown(
-                `Đến ngày: ${endDate.toLocaleDateString()}`,
-                showEndDatePicker,
-                () => setShowEndDatePicker(true),
-            )}
 
             {renderDropdown(selectedPrice || 'Mức Giá', showPricePicker, () =>
                 setShowPricePicker(prev => !prev),
@@ -215,19 +186,10 @@ const FilterScreen = (props) => {
                 />
             )}
 
-            {/* Date Picker cho ngày kết thúc */}
-            {showEndDatePicker && (
-                <DateTimePicker
-                    value={endDate}
-                    mode="date"
-                    display="default"
-                    onChange={onChangeEndDate}
-                />
-            )}
 
             <View style={styles.containerbuttonFilter}>
                 <TouchableOpacity style={styles.applyButton} onPress={applyFilters}>
-                    <Text style={styles.applyButtonText}>Áp Dụng</Text>
+                    <Text style={styles.applyButtonText}>Áp Dụng {filterTourData.data.length} kết quả</Text>
                 </TouchableOpacity>
             </View>
         </View>

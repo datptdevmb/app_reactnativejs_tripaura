@@ -9,8 +9,8 @@ export const styles = StyleSheet.create({
     fontWeight: '700',
     fontFamily: 'Lato',
     color: '#212121',
-    marginTop: 39,
-    marginLeft: 32,
+    marginTop: 12,
+    marginLeft: 15,
   },
   image: {
     margin: 'auto',

@@ -1,6 +1,5 @@
-
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { register, googleLogin } from '../../sevices/auth/auth.service';
+import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
+import {register, googleLogin} from '../../sevices/auth/auth.service';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -29,15 +28,31 @@ export const fetchGoogleUser = createAsyncThunk(
   },
 );
 
-export const checkLoginStatus = createAsyncThunk('auth/checkLoginStatus', async () => {
-  const userData = await AsyncStorage.getItem('userId');
-  if (userData) {
+// Thực hiện đăng xuất
+export const logoutUser = createAsyncThunk(
+  'auth/logoutUser',
+  async (_, thunkApi) => {
+    try {
+      await AsyncStorage.removeItem('userId');
 
-    return { isLogin: true, user: JSON.parse(userData) }; 
-  } else {
-    return { isLogin: false, user: null };
-  }
-});
+      return {};
+    } catch (error) {
+      throw error;
+    }
+  },
+);
+
+export const checkLoginStatus = createAsyncThunk(
+  'auth/checkLoginStatus',
+  async () => {
+    const userData = await AsyncStorage.getItem('userId');
+    if (userData) {
+      return {isLogin: true, user: JSON.parse(userData)};
+    } else {
+      return {isLogin: false, user: null};
+    }
+  },
+);
 
 const initialState = {
   user: {},
@@ -81,7 +96,7 @@ const authenSlice = createSlice({
     // Xử lý trạng thái khi kiểm tra đăng nhập
     builder.addCase(checkLoginStatus.fulfilled, (state, action) => {
       state.isLogin = action.payload.isLogin;
-      state.user = action.payload.user || {};  // Nếu không có user, đặt thành object rỗng
+      state.user = action.payload.user || {}; // Nếu không có user, đặt thành object rỗng
       state.loading = false;
     });
     builder.addCase(checkLoginStatus.pending, state => {

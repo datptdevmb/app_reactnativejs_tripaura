@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Tạo hàm ThayDoiThongTin để thực hiện gọi API cập nhật thông tin người dùng
 export const ThayDoiThongTin = createAsyncThunk(
@@ -24,7 +24,7 @@ export const ThayDoiThongTin = createAsyncThunk(
             }
 
             console.log("============== changeUser =========", user);
-            return user; // Đây là payload khi thành công
+            return user;
         } catch (error) {
             return rejectWithValue(error.message || 'Network Error');
         }
@@ -32,7 +32,6 @@ export const ThayDoiThongTin = createAsyncThunk(
 );
 
 const changeUserSlice = createSlice({
-
     name: 'changeUser',
     initialState: {
         user: null,
@@ -48,12 +47,9 @@ const changeUserSlice = createSlice({
                 state.error = null;
             })
             .addCase(ThayDoiThongTin.fulfilled, (state, action) => {
-
                 console.log("Fulfilled action:", action);
                 state.changeUserStatus = 'succeeded';
                 state.user = action.payload;
-
-
             })
             .addCase(ThayDoiThongTin.rejected, (state, action) => {
                 state.changeUserStatus = 'failed';

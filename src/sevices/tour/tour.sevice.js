@@ -19,6 +19,7 @@ class Tour {
     try {
       const reponse = await axios.post(TOURSBYCATEID_API, {categoryId: cateId});
       this.tours = reponse.data;
+      console.log(reponse.data)
       return this.tours;
     } catch (error) {
       console.log('errrr' + error);

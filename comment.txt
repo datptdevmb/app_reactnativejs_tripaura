@@ -3,3 +3,6 @@ npm install react-native-gesture-handler
 npm install react-native-reanimated
 npm install @react-navigation/material-top-tabs react-native-tab-view
 npm install react-native-pager-view
+//
+npm uninstall react-native-snap-carousel
+npm install react-native-snap-carousel@^4.0.0-beta.6

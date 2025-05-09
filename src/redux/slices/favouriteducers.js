@@ -132,7 +132,7 @@ const favoriteSlice = createSlice({
             id: item.tourId,
             image: item?.images[0] || 'https://tse4.mm.bing.net/th?id=OIP.1zq4a7G007iHUBybiLxrTwAAAA&pid=Api&P=0&h=220',
             tourName: item?.tourName || 'Khám Phá trải nghiệm tham quan Phố cổ Hội An',
-            price: item?.details[0]?.priceAdult || 100000,
+            price: item?.details?.priceAdult || 100000,
             locate: item?.locations?.destination || 'Nghệ An'
           }
         ));
